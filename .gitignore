@@ -1,15 +1,19 @@
-__pycache__/
-*.pyc
-.pytest_cache/
+# .gitignore
+
+# ignore virtual environment
 .env
-*.egg-info/
-dist/
-build/
-.venv/
+
+# ignore node_modules
 node_modules/
-target/
-bin/
-obj/
-*.o
-*.so
-*.dylib/
+
+# ignore build artifacts
+build/
+
+# ignore coverage data
+coverage/
+
+# ignore pyc files
+*.pyc
+
+# ignore ruff cache
+.ruffcache
