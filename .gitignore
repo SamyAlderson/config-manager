@@ -1,19 +1,12 @@
 # .gitignore
-
-# ignore virtual environment
-.env
-
-# ignore node_modules
-node_modules/
-
-# ignore build artifacts
-build/
-
-# ignore coverage data
-coverage/
-
-# ignore pyc files
-*.pyc
-
 # ignore ruff cache
-.ruffcache
+.ruff_cache/
+
+# ignore ruff config
+.ruff.toml
+
+# ignore ruff logs
+.ruff.log
+
+# ignore virtualenv
+venv/
