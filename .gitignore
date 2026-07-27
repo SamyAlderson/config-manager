@@ -1,12 +1,12 @@
 # .gitignore
 # ignore ruff cache
-.ruff_cache/
-
-# ignore ruff config
-.ruff.toml
+.ruff_cache
 
 # ignore ruff logs
-.ruff.log
+.ruff_log
 
-# ignore virtualenv
+# ignore ruff settings
+.ruff_settings.yaml
+
+# ignore venv
 venv/
