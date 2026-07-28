@@ -1,12 +1,31 @@
 # .gitignore
+
 # ignore ruff cache
-.ruff_cache
+.cache/ruff
 
 # ignore ruff logs
-.ruff_log
+.cache/ruff/logs
 
-# ignore ruff settings
-.ruff_settings.yaml
+# ignore ruff config
+.cache/ruff/config
 
-# ignore venv
+# ignore ruff results
+.cache/ruff/results
+
+# ignore other ruff files
+.cache/ruff/*.pyc
+
+# ignore other files
+*.pyc
+*.pyo
+*.class
+*.swp
+*.log
+*.tmp
+*~
+
+# ignore node modules
+node_modules/
+
+# ignore other venv files
 venv/
