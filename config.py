@@ -1,6 +1,7 @@
 # config.py
 
 import configparser
+import json
 import logging
 import jsonschema
 
@@ -14,8 +15,13 @@ class ConfigParser:
     def __init__(self, config_file):
         # Assume config file is a JSON file
         self.config_file = config_file
-        self.config = self._parse_config()
+        self.config = None
         
+        try:
+            self.config = self._parse_config()
+        except Exception as e:
+            logger.error(f"Failed to parse config file: {e}")
+    
     def _parse_config(self):
         try:
             with open(self.config_file, 'r') as f:
@@ -24,11 +30,11 @@ class ConfigParser:
                 # Validate JSON schema
                 jsonschema.validate(instance=config, schema={'type': 'object'})
                 return config
-        except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse JSON config file: {e}")
-            raise
         except FileNotFoundError:
             logger.error(f"Config file not found: {self.config_file}")
+            raise
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse JSON config file: {e}")
             raise
         except jsonschema.exceptions.ValidationError as e:
             logger.error(f"Invalid JSON schema: {e}")
@@ -46,4 +52,7 @@ if __name__ == "__main__":
     config_file = "config.json"
     parser = parse_config(config_file)
     config = parser.get_config()
-    print(config)
+    if config is not None:
+        print(config)
+    else:
+        logger.error("Failed to parse config file")
