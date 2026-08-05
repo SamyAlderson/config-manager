@@ -7,18 +7,35 @@ def read_file(filename):
             return f.read()
     except FileNotFoundError:
         raise ValueError(f"File not found: {filename}")
+    except Exception as e:
+        print(f"Error reading file: {filename} - {e}")
+        raise
 
 def get_version():
     """Get the version number from the README file."""
-    return read_file('README.md').splitlines()[1].strip()[1:-1]
+    try:
+        lines = read_file('README.md').splitlines()
+        if len(lines) < 2:
+            raise ValueError("README file is empty")
+        return lines[1].strip()[1:-1]
+    except Exception as e:
+        print(f"Error getting version: {e}")
+        raise
+
+def get_long_description():
+    """Get the long description from the README file."""
+    try:
+        return read_file('README.md')
+    except Exception as e:
+        print(f"Error getting long description: {e}")
+        return ""
 
 setup(
     name='config-manager',
     description='Simple config management tool for devops',
-    long_description=read_file('README.md'),
+    long_description=get_long_description(),
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    py_modules=[],
     version=get_version(),
     author='Samy Alderson',
     author_email='samy@alderson.io',
