@@ -1,33 +1,25 @@
-# config.py
-
 import configparser
 import json
 import logging
 import jsonschema
 
-# Use logging module to handle errors and warnings
+# Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class ConfigParser:
-    """Simple config file parser"""
-    
     def __init__(self, config_file):
-        # Assume config file is a JSON file
         self.config_file = config_file
         self.config = None
-        
         try:
             self.config = self._parse_config()
         except Exception as e:
             logger.error(f"Failed to parse config file: {e}")
-    
+
     def _parse_config(self):
         try:
             with open(self.config_file, 'r') as f:
-                # Load JSON config file
                 config = json.load(f)
-                # Validate JSON schema
                 jsonschema.validate(instance=config, schema={'type': 'object'})
                 return config
         except FileNotFoundError:
@@ -39,20 +31,41 @@ class ConfigParser:
         except jsonschema.exceptions.ValidationError as e:
             logger.error(f"Invalid JSON schema: {e}")
             raise
-    
+
     def get_config(self):
         return self.config
 
 def parse_config(config_file):
-    """Parse config file and return a ConfigParser object"""
     return ConfigParser(config_file)
 
-# Example usage
-if __name__ == "__main__":
+def load_json_schema(schema_file):
+    try:
+        with open(schema_file, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        logger.error(f"JSON schema file not found: {schema_file}")
+        raise
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to parse JSON schema file: {e}")
+        raise
+
+def validate_config(config, schema):
+    try:
+        jsonschema.validate(instance=config, schema=schema)
+    except jsonschema.exceptions.ValidationError as e:
+        logger.error(f"Invalid JSON schema: {e}")
+        raise
+
+def main():
     config_file = "config.json"
-    parser = parse_config(config_file)
-    config = parser.get_config()
-    if config is not None:
+    schema_file = "schema.json"
+    try:
+        config = parse_config(config_file).get_config()
+        schema = load_json_schema(schema_file)
+        validate_config(config, schema)
         print(config)
-    else:
-        logger.error("Failed to parse config file")
+    except Exception as e:
+        logger.error(f"Failed to parse config file: {e}")
+
+if __name__ == "__main__":
+    main()
